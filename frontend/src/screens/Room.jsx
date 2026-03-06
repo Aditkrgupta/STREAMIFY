@@ -39,6 +39,24 @@ const RoomPage = () => {
         }
     },[myStream])
 
+    const handleEndCall=useCallback(()=>{
+        if(myStream)
+        {
+            myStream.getTracks().forEach(track => track.stop());
+        }
+          if(remoteStream)
+        {
+            remoteStream.getTracks().forEach(track => track.stop());
+        }
+      peer.peer.close()
+            peer.resetPeer()
+        
+
+        setMystream(null)
+        setRemoteStream(null)
+        setRemoteSocketId(null)
+    },[myStream,remoteStream])
+
     const handleCallAccepted = useCallback(async ({ from, ans }) => {
         peer.setLocalDescription(ans)
         console.log('call-aacepted')
@@ -110,6 +128,13 @@ const RoomPage = () => {
         Send Stream
       </button>
     )}
+
+      {(myStream || remoteStream) && (
+    <button onClick={handleEndCall} style={{background:"red",color:"white"}}>
+      End Call
+    </button>
+  )}
+
 
   </div>
 
