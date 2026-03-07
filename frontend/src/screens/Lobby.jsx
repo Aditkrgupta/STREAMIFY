@@ -45,7 +45,8 @@ useEffect(()=>{
         value={room}
         onChange={(e)=>setRoom(e.target.value)}
       />
-
+      
+      <button>hello</button>
       <button>Join Room</button>
 
     </form>
