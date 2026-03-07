@@ -11,7 +11,7 @@ export const useSocket=()=>{
 export const SocketProvider=(props)=>{
     // const socket=useMemo(()=>io('https://streamify-backend-j3tp.onrender.com'),[])
         const socket=useMemo(()=>{
-  const URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:8000';
+  const URL = 'https://streamify-backend-j3tp.onrender.com';
   return io(URL, {
     autoConnect: true,
     reconnection: true
