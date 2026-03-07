@@ -39,6 +39,8 @@ useEffect(()=>{
         onChange={(e)=>setEmail(e.target.value)}
       />
 
+
+
       <input
         type="text"
         placeholder="Enter Room ID"
@@ -46,7 +48,7 @@ useEffect(()=>{
         onChange={(e)=>setRoom(e.target.value)}
       />
       
-      <button>hello</button>
+
       <button>Join Room</button>
 
     </form>

@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, replace } from "react-router-dom";
 import { useSocket } from "../context/SocketProvider";
 import { useEffect } from "react";
 import { useCallback } from "react";
@@ -7,6 +7,7 @@ import { useState } from "react";
 import peer from "../service/peer";
 const RoomPage = () => {
     const socket = useSocket()
+    const navigate=useNavigate()
     const { roomId } = useParams()
     const [filter, setFilter] = useState("none")
     const [remoteSocketId, setRemoteSocketId] = useState(null)
@@ -79,6 +80,11 @@ const RoomPage = () => {
         await peer.setLocalDescription(ans)
     }, [])
 
+
+    const handleChat=useCallback(()=>{
+      navigate(`/chat/${roomId}`)
+    },[navigate,roomId])
+
     useEffect(() => {
         peer.peer.addEventListener('negotiationneeded', handleNegoNeeded)
         return () => {
@@ -114,7 +120,20 @@ const RoomPage = () => {
 
   <h1>Room : {roomId}</h1>
   <h2>{remoteSocketId ? "User Connected" : "Waiting for user..."}</h2>
-
+  <button 
+  onClick={handleChat}
+  style={{
+    width: "60px",
+    padding: "10px",
+    borderRadius: "10px",
+    backgroundColor: "#4f46e5",
+    color: "white",
+    border: "none",
+    cursor: "pointer"
+  }}
+>
+  Chat
+</button>
   <div className="controls">
 
     {remoteSocketId && (
