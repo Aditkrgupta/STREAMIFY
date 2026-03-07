@@ -14,14 +14,13 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
   },
 });
-
+const ROOM="group"
 const emailToSocketIdMap = new Map();
 const socketIdToEmailMap = new Map();
 
 io.on("connection", (socket) => {
   console.log("Socket Connected", socket.id);
 
-  // join video room
   socket.on("room:join", (data) => {
     const { email, room } = data;
 
@@ -33,8 +32,6 @@ io.on("connection", (socket) => {
     io.to(room).emit("user:joined", { email, id: socket.id });
     io.to(socket.id).emit("room:join", data);
   });
-
-  // video call
   socket.on("user:call", ({ to, offer }) => {
     io.to(to).emit("incoming:call", { from: socket.id, offer });
   });
@@ -51,17 +48,21 @@ io.on("connection", (socket) => {
     io.to(to).emit("peer:nego:final", { from: socket.id, ans });
   });
 
-  // chat message
-  socket.on("chatMessage", ({ msg, roomId }) => {
-    io.to(roomId).emit("chatMessage", msg);
+  socket.on('joinRoom',(userName)=>{
+    socket.join(ROOM)
+    socket.to(ROOM).emit('roomNotice',userName)
+    console.log("heloo")
   });
 
-  // typing
-  socket.on("typing", ({ userName, roomId }) => {
-    socket.to(roomId).emit("typing", userName);
+  socket.on("chatMessage", (msg) => {
+    socket.to(ROOM).emit("chatMessage", msg);
   });
 
-  socket.on("stopTyping", ({ userName, roomId }) => {
-    socket.to(roomId).emit("stopTyping", userName);
+  socket.on("typing", (userName) => {
+    socket.to(ROOM).emit("typing", userName);
+  });
+
+  socket.on("stopTyping", (userName) => {
+    socket.to(ROOM).emit("stopTyping", userName);
   });
 });
